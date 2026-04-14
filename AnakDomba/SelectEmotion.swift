@@ -20,13 +20,13 @@ struct SelectEmotion: View {
     
     // MARK: - Data
     let emotions: [Emotion] = [
-        Emotion(emoji: "😊", label: "Senang"),
-        Emotion(emoji: "☹️", label: "Sedih"),
-        Emotion(emoji: "😡", label: "Marah"),
-        Emotion(emoji: "🤢", label: "Jijik"),
-        Emotion(emoji: "🤔", label: "Ragu"),
-        Emotion(emoji: "😲", label: "Terkejut"),
-        Emotion(emoji: "😰", label: "Takut")
+        Emotion(emoji: "😊", label: "Senang", color: .yellow),
+        Emotion(emoji: "☹️", label: "Sedih", color: .blue),
+        Emotion(emoji: "😡", label: "Marah", color: .red),
+        Emotion(emoji: "🤢", label: "Jijik", color: .green),
+        Emotion(emoji: "🤔", label: "Ragu", color: .purple),
+        Emotion(emoji: "😲", label: "Terkejut", color: .orange),
+        Emotion(emoji: "😰", label: "Takut", color: .teal)
     ]
     
     var body: some View {
@@ -52,20 +52,10 @@ struct SelectEmotion: View {
                 Spacer()
                 
                 // Mulai Button
-                Button(action: {
+                PrimaryButton(title: "Mulai", isEnabled: selectedEmotion != nil, color: .blue, width: 300) {
                     UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                     navigateToReflection = true
-                }) {
-                    Text("Mulai")
-                        .font(.system(size: 16, weight: .semibold))
-                        .padding(.horizontal, 24)
-                        .padding(.vertical, 12)
-                        .background(selectedEmotion != nil ? Color.blue : Color.gray.opacity(0.4))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                        .shadow(radius: 4)
                 }
-                .disabled(selectedEmotion == nil)
                 .padding(.bottom, 8)
             }
             .padding()
@@ -95,8 +85,8 @@ struct SelectEmotion: View {
         .frame(width: 150, height: 150)
         .background(
             selectedEmotion == emotion.id
-            ? Color.blue.opacity(0.3)
-            : Color.gray.opacity(0.2)
+            ? emotion.color.opacity(0.7)
+            : emotion.color.opacity(0.2)
         )
         .cornerRadius(12)
         .onTapGesture {

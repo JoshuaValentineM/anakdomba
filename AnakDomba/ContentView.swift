@@ -31,6 +31,11 @@ struct HomeView: View {
     
     var body: some View {
         VStack(spacing: 16) {
+            Text("[Logo]")
+                .font(.system(size: 36))
+                .bold()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 16)
             Text("Shalom!")
                 .font(.system(size: 36))
                 .bold()
@@ -43,7 +48,7 @@ struct HomeView: View {
                 Spacer()
                 
 //                Button(action: {
-//                    print("Plus tapped")
+//                    print("Plus gas")
 //                }) {
 //                    PlusButton()
 //                }

@@ -11,4 +11,5 @@ struct Emotion: Identifiable {
     let id = UUID()
     let emoji: String
     let label: String
+    let color: Color
 }
