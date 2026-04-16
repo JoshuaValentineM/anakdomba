@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Emotion: Identifiable {
+struct Emotion: Identifiable, Equatable {
     let id = UUID()
     let emoji: String
     let label: String

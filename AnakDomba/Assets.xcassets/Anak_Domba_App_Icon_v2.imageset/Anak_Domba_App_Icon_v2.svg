@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9bd2a8"/>
+      <stop offset="100%" stop-color="#64a5c6"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Background matches standard iOS 1024x1024 square. Apple will automatically apply the rounded corners. -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  
+  <g filter="url(#glow)">
+    <!-- Sun Rays -->
+    <circle cx="512" cy="420" r="280" stroke="#FFF7D6" stroke-width="12" stroke-dasharray="30 35" fill="none" opacity="0.8"/>
+    
+    <!-- Heart (Center of Cross) -->
+    <path d="M 512 320 C 512 320 480 270 440 270 C 390 270 390 340 390 340 C 390 400 512 460 512 460 C 512 460 634 400 634 340 C 634 340 634 270 584 270 C 544 270 512 320 512 320 Z" fill="none" stroke="#FFF7D6" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Cross Beams -->
+    <path d="M 512 160 V 270 M 512 460 V 550 M 300 320 H 390 M 634 320 H 724" stroke="#FFF7D6" stroke-width="26" stroke-linecap="round" fill="none"/>
+    
+    <!-- Open Book -->
+    <path d="M 280 600 Q 396 600 512 660 Q 628 600 744 600 L 744 700 Q 628 700 512 760 Q 396 700 280 700 Z" stroke="#FFF7D6" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M 512 660 V 760" stroke="#FFF7D6" stroke-width="26" stroke-linecap="round" fill="none"/>
+  </g>
+  
+  <!-- App Title -->
+  <text x="512" y="900" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="100" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="1">Anak Domba</text>
+</svg>

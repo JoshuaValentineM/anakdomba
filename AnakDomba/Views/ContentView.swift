@@ -31,18 +31,17 @@ struct HomeView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Text("[Logo]")
-                .font(.system(size: 36))
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 16)
-            Text("Shalom!")
-                .font(.system(size: 36))
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.leading, 16)
+//            Text("[Logo]")
+//                .font(.system(size: 36))
+//                .bold()
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                .padding(.leading, 16)
+            Image(.anakDombaHorizontalLogoWhiteV2)
+                .resizable()
+                .scaledToFit()
+                .padding(.trailing)
 
-            Spacer()
+//            Spacer()
 
             VStack(spacing: 12) {
                 Spacer()
@@ -53,7 +52,7 @@ struct HomeView: View {
 //                    PlusButton()
 //                }
 //                
-                    NavigationLink(destination: SelectEmotion()){
+                    NavigationLink(destination: SelectEmotionView()){
                         PlusButton()
                     }
                 
@@ -71,6 +70,7 @@ struct HomeView: View {
                 
                 Text("Mulai Refleksi")
                     .font(.system(size: 30))
+                Spacer()
                 Spacer()
                 
             }
@@ -91,8 +91,9 @@ struct PlusButton: View {
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.gray.opacity(0.15))
+                .fill(Color.clear)
                 .frame(width: 160, height: 160)
+                .glassEffect()
             Text("+")
                 .font(.system(size: 90))
         }
