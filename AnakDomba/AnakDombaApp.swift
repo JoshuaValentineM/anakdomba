@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct AnakDombaApp: App {
@@ -13,5 +14,6 @@ struct AnakDombaApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: UserReflection.self)
     }
 }

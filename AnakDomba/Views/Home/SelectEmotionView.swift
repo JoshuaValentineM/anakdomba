@@ -53,13 +53,13 @@ struct SelectEmotionView: View {
     
     // MARK: - Data
     let emotions: [Emotion] = [
-        Emotion(emoji: "😊", label: "Senang", color: .yellow),
-        Emotion(emoji: "☹️", label: "Sedih", color: .blue),
         Emotion(emoji: "😡", label: "Marah", color: .red),
-        Emotion(emoji: "🤢", label: "Jijik", color: .green),
         Emotion(emoji: "🤔", label: "Ragu", color: .purple),
-        Emotion(emoji: "😲", label: "Terkejut", color: .orange),
         Emotion(emoji: "😰", label: "Takut", color: .teal),
+        Emotion(emoji: "☹️", label: "Sedih", color: .blue),
+        Emotion(emoji: "😊", label: "Senang", color: .yellow),
+        Emotion(emoji: "🤢", label: "Jijik", color: .green),
+        Emotion(emoji: "😲", label: "Terkejut", color: .orange),
         Emotion(emoji: "❓", label: "Tidak yakin", color: .gray)
     ]
     

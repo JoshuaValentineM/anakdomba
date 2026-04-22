@@ -14,7 +14,7 @@ enum EmotionKeywords {
             "sedih", "duka", "pilu", "putus asa", "kecewa", "hati hancur",
             "kesedihan", "gagal", "tidak lolos", "menyesal", "salah",
             "tidak berhasil", "kesepian", "lelah", "bosan", "tertekan",
-            "depresi", "生存", "berduka", "mengingat", "melankolis"
+            "depresi", "berduka", "mengingat", "melankolis"
         ],
         
         "Marah": [

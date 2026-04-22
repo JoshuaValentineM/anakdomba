@@ -25,7 +25,7 @@ struct PrimaryButton: View {
                 .glassEffect(isEnabled ? .regular.tint(color) : .regular)
 //                .background(isEnabled ? color : Color.gray.opacity(0.4))
 //                .background(.ultraThinMaterial)
-                .foregroundColor(.white)
+                .foregroundColor(isEnabled ? .white : .white.opacity(0.5))
                 .cornerRadius(12)
                 .shadow(radius: 4)
         }

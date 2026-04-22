@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 import Combine
 
 @MainActor
@@ -14,9 +15,11 @@ class ReflectionViewModel: ObservableObject {
     @Published var selectedVerse: Verse?
     @Published var songs: [Song] = []
     @Published var currentPrompt: String = ""
+    @Published var isSaved: Bool = false
     
     let selectedEmotion: Emotion
     let beforeYouBeginText: String?
+    var modelContext: ModelContext?
     
     init(selectedEmotion: Emotion, beforeYouBeginText: String? = nil) {
         self.selectedEmotion = selectedEmotion
@@ -25,13 +28,13 @@ class ReflectionViewModel: ObservableObject {
     
     var backgroundColor: Color {
         switch selectedEmotion.label {
-        case "Senang": return .yellow.opacity(0.6)
-        case "Sedih": return .blue.opacity(0.6)
-        case "Marah": return .red.opacity(0.6)
-        case "Jijik": return .green.opacity(0.6)
-        case "Ragu": return .purple.opacity(0.6)
-        case "Terkejut": return .orange.opacity(0.6)
-        case "Takut": return .teal.opacity(0.6)
+        case "Senang": return .yellow.opacity(0.15)
+        case "Sedih": return .blue.opacity(0.15)
+        case "Marah": return .red.opacity(0.15)
+        case "Jijik": return .green.opacity(0.15)
+        case "Ragu": return .purple.opacity(0.15)
+        case "Terkejut": return .orange.opacity(0.15)
+        case "Takut": return .teal.opacity(0.15)
         default: return .black
         }
     }
@@ -42,12 +45,38 @@ class ReflectionViewModel: ObservableObject {
             songs = content.songs
             
             if let verse = selectedVerse {
-                currentPrompt = content.prompt.replacingOccurrences(of: "[Ayat]", with: verse.reference)
+                currentPrompt = content.getPresenceText()
             }
         }
     }
     
     func saveReflection() {
-        print("Saving reflection...")
+        guard let verse = selectedVerse,
+              let song = songs.first else { return }
+        
+        let reflection = UserReflection(
+            emotionLabel: selectedEmotion.label,
+            emotionEmoji: selectedEmotion.emoji,
+            verseReference: verse.reference,
+            verseText: verse.text,
+            songTitle: song.title,
+            songArtist: song.artist,
+            presenceText: "",
+            gratitudeText: reflectionText,
+            reviewText: "",
+            verseReflectionText: "",
+            songReflectionText: "",
+            actionText: ""
+        )
+        
+        if let context = modelContext {
+            context.insert(reflection)
+            do {
+                try context.save()
+                isSaved = true
+            } catch {
+                print("Failed to save reflection: \(error)")
+            }
+        }
     }
 }

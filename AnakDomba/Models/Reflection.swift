@@ -17,7 +17,12 @@ final class UserReflection {
     var verseText: String
     var songTitle: String
     var songArtist: String
-    var userText: String
+    var presenceText: String
+    var gratitudeText: String
+    var reviewText: String
+    var verseReflectionText: String
+    var songReflectionText: String
+    var actionText: String
     var createdAt: Date
     var updatedAt: Date
     
@@ -29,7 +34,12 @@ final class UserReflection {
         verseText: String,
         songTitle: String,
         songArtist: String,
-        userText: String,
+        presenceText: String = "",
+        gratitudeText: String = "",
+        reviewText: String = "",
+        verseReflectionText: String = "",
+        songReflectionText: String = "",
+        actionText: String = "",
         createdAt: Date = Date(),
         updatedAt: Date = Date()
     ) {
@@ -40,7 +50,12 @@ final class UserReflection {
         self.verseText = verseText
         self.songTitle = songTitle
         self.songArtist = songArtist
-        self.userText = userText
+        self.presenceText = presenceText
+        self.gratitudeText = gratitudeText
+        self.reviewText = reviewText
+        self.verseReflectionText = verseReflectionText
+        self.songReflectionText = songReflectionText
+        self.actionText = actionText
         self.createdAt = createdAt
         self.updatedAt = updatedAt
     }
