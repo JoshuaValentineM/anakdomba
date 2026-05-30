@@ -1,174 +1,187 @@
 # AnakDomba - Project Context
 
-## Overview
-- **Project Name**: AnakDomba
-- **Type**: SwiftUI iOS App (iOS 17+)
-- **Purpose**: Christian daily reflection and mood-tracking app
-- **Language**: Swift
-- **Architecture**: MVVM with SwiftData
+## Project Summary
+- Project: `AnakDomba`
+- Platform: iOS app built with SwiftUI
+- Persistence: SwiftData
+- App purpose: emotion-based Christian reflection flow with verse/song guidance and saved reflection history
+- Current main flow:
+  - `ContentView` -> `HomeView` -> `SelectEmotionView` -> `ReflectionView`
+  - Saved reflections are shown in `HistoryView`
 
-## Updated File Structure (April 2026)
+## Important Files
+- [AnakDombaApp.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/AnakDombaApp.swift)
+  - App entry point
+  - Provides `.modelContainer(for: UserReflection.self)`
+- [ContentView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/ContentView.swift)
+  - Main tab structure for Home and History
+- [SelectEmotionView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/Home/SelectEmotionView.swift)
+  - Emotion selection UI
+  - Includes `Tidak yakin` helper flow
+- [ReflectionView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/Reflection/ReflectionView.swift)
+  - Reflection screen with verse, song, step flow, save flow
+- [HistoryView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/History/HistoryView.swift)
+  - Reflection history list and navigation back into saved reflections
+- [PrimaryButton.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Components/PrimaryButton.swift)
+  - Reusable button with glass effect
+- [Reflection.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Models/Reflection.swift)
+  - SwiftData `@Model` for saved reflections
+- [EmotionKeywords.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Resources/EmotionKeywords.swift)
+  - Keyword matching source for `Tidak yakin`
 
-```
-AnakDomba/
-├── AnakDombaApp.swift              # App entry point with SwiftData container
-├── Models/
-│   ├── Emotion.swift              # Emotion data model
-│   ├── Verse.swift              # Bible verse model
-│   ├── Song.swift              # Song model
-│   ├── EmotionContent.swift     # Content data (verses, songs, prompts)
-│   └── Reflection.swift         # SwiftData model for persistence (@Model)
-├── ViewModels/
-│   ├── SelectEmotionViewModel.swift  # Emotion selection logic
-│   ├── ReflectionViewModel.swift  # Reflection logic
-│   └── HistoryViewModel.swift    # History load/filter/delete
-├── Views/
-│   ├── ContentView.swift         # Main TabView
-│   ├── Home/
-│   │   └── SelectEmotionView.swift
-│   └── History/
-│       └── HistoryView.swift
-├── Components/
-│   └── PrimaryButton.swift
-├── Resources/
-│   └── EmotionKeywords.swift   # Keyword dictionary for emotion matching (135+ keywords)
-└── Assets.xcassets/
-```
+## Data Model
+- Persisted model: `UserReflection`
+- Stores:
+  - emotion label + emoji
+  - verse reference + verse text
+  - song title + artist
+  - presence / gratitude / review / verseReflection / songReflection / action text
+  - created / updated timestamps
 
----
+## Emotion System
+- Main emotion cards:
+  - `Marah` -> red
+  - `Ragu` -> purple
+  - `Takut` -> teal
+  - `Sedih` -> blue
+  - `Senang` -> yellow
+  - `Jijik` -> green
+  - `Terkejut` -> orange
+  - `Tidak yakin` -> gray
 
-## Features Implemented
+## Current UX Decisions
 
-### 1. Emotion Selection (SelectEmotionView)
-- 7 emotions with emojis: Senang, Sedih, Marah, Jijik, Ragu, Terkejut, Takut
-- Grid layout with color-coded boxes
-- **NEW**: "Tidak yakin" (❓) 8th card for confused users
-- "Mulai" button (enabled when emotion selected)
-- Loading animation before navigation
+### Select Emotion Screen
+- Keep `Bagaimana wajahmu saat ini?` as the navigation title only
+- Subtitle/helper text under it:
+  - `Pilih yang sesuai dengan perasaanmu.`
+  - `Tahan untuk melihat detail perasaan.`
+- Page uses a subtle top tint based on the selected emotion
+- `Mulai` button uses a softened tint derived from the selected emotion, not the raw bright emotion color
+- Emotion cards:
+  - Front side should stay visually simple: emoji + emotion label only
+  - Long press flips card to detail side
+  - Tap selects the emotion
+  - Only one card should be flipped at a time
+  - Selecting another emotion should reset any flipped card
+- `Tidak yakin` card opens a helper sheet
 
-### 2. "Tidak yakin" Feature (Confused Users)
-User flow when confused about their emotion:
-1. Tap "Tidak yakin" → Opens full-screen sheet
-2. "Apa yang sedang terjadi?" → User writes what happened
-3. Keywords analyzed → Shows 2-3 suggested emotions as tappable chips
-4. User taps suggestion → Goes directly to Reflection with that emotion
-   OR taps "Pilih sendiri" → Returns to emotion grid to pick manually
+### Reflection Screen
+- Emotion color is used as subtle accent, not as an overwhelming full-screen fill
+- Section labels were intentionally added for harmony:
+  - `Ayat Alkitab`
+  - `Lagu Rohani`
+  - `Refleksi atas Perasaan ...ku`
+- Title-to-content spacing was normalized
+- Song carousel top alignment was fixed so its gap matches other sections
+- Reflection step area uses a progress bar instead of a simple divider
+- Reflection text editor is fixed-height and scrolls internally
+- Reflection card height was reduced from the earlier larger version
 
-**Keyword Matching**: ~135 Indonesian keywords across 7 emotions:
-- "gagal", "ditinggalkan", "menangis" → Sedih
-- "marah", "kecewa", "kesal" → Marah
-- "takut", "cemas", "khawatir" → Takut
-- etc.
+### History Screen
+- History cards use emotion-based color tint by saved emotion label
+- Opening a saved reflection should restore the correct emotion color
+- `Ragu` must reopen purple, not blue
 
-### 3. Reflection Screen (ReflectionView)
-- **Dynamic Content**: Each emotion has:
-  - 3 random Bible verses
-  - 3 random songs
-  - 1 journaling prompt template
-- Background color changes based on selected emotion
-- **VerseCard**: Displays verse with reference
-- **SongCarousel**: Horizontal scrollable songs with dot indicators
-- **ReflectionInputBox**: Tap to write in full-screen sheet
-- **Discard Alert**: "Apakah kamu yakin ingin kembali?" when leaving with unsaved changes
-- **Custom Back Button**: "Kembali" with confirmation dialog
-- **Save Button**: "Simpan" - saves to SwiftData
+## `Tidak yakin` Sheet Behavior
+- The sheet is a multi-step helper flow:
+  1. User writes what happened
+  2. App suggests possible emotions
+  3. User either picks a suggestion or goes back to manual choice
+- Sheet styling:
+  - Uses material/glass-like background, not an opaque dark block
+  - Input area is glass-style too
+- Suggestion step behavior:
+  - If no suggestions are found:
+    - Do not show `Berdasarkan tulisanmu, mungkin kamu merasa:`
+    - Show a proper empty state message
+    - Show button text: `Kembali pilih perasaan`
+  - If suggestions are found:
+    - Show `Berdasarkan tulisanmu, mungkin kamu merasa:`
+    - Center results if count is 1 or 2
+    - Use grid if count is 3+
+    - Show `Atau`
+    - Then show `Kembali ke pilih perasaan`
 
-### 4. Save Feature (SwiftData)
-- "Simpan" button saves reflection to SwiftData
-- Saves: emotionLabel, emotionEmoji, verseReference, verseText, songTitle, songArtist, userText, createdAt
-- Shows "Tersimpan!" success alert
-- Auto-navigates back after save
+## Navigation / Save Behavior
+- After tapping `Simpan` in `ReflectionView`, save success modal appears
+- Tapping `Tutup Refleksi` should return user to Home, not stop on `SelectEmotionView`
+- This was implemented using notifications between `ReflectionView` and `SelectEmotionView`
+- Saved reflections should appear in `HistoryView`
 
-### 5. History View
-- Shows all saved reflections (most recent first)
-- **Filter Chips**: Semua, Senang, Sedih, Marah, Jijik, Ragu, Terkejut, Takut
-- **History Card**: Shows emoji, emotion label, date, verse preview, "Baca →" indicator
-- Tap card → Opens full detail view
-- **Context Menu**: Long press → Delete option
+## Session Work Completed
 
----
+### ReflectionView work
+- Added section titles above verse card and song carousel
+- Normalized spacing between titles and content
+- Fixed song carousel top gap issue caused by `TabView`
+- Reworked emotion color usage to be more subtle and component-based
+- Made reflection screen more adaptive for light/dark surfaces
+- Removed excessive borders after testing
+- Replaced divider with progress bar
+- Made step content area constrained and scrollable
+- Made text editor fixed-height so it scrolls instead of expanding
+- Tuned reflection card and spacing to feel more compact
+- Back toolbar button hit area was expanded to full usable tap target
 
-## Core Navigation Flow
-```
-ContentView (TabView)
-├── HomeView → PlusButton ��� SelectEmotionView → ReflectionView → Simpan
-│                              ↓ (saved to SwiftData)
-└── HistoryView (saved reflections with filters)
-```
+### History / navigation work
+- History cards reopen reflections with the correct emotion color
+- Return-to-home flow after save was implemented
+- History refresh logic was reworked multiple times due debugging
 
----
+### SelectEmotionView work
+- Added subtle selected-emotion page tint
+- Tuned `Mulai` button tint to match selected emotion more softly
+- Added helper subtitle lines below the nav title
+- Tried multiple card-detail interaction patterns:
+  - info icon flip
+  - long press flip
+- Final intended direction:
+  - no visible info icon clutter
+  - long press anywhere on card for detail
+  - tap anywhere on card to select
+  - only one flipped card at a time
+- `Tidak yakin` suggestion and empty-state flow was refined
+- Bottom `Mulai` area was iterated between floating / glass / block styles
 
-## SwiftData Model
-```swift
-@Model
-final class UserReflection {
-    var id: UUID
-    var emotionLabel: String
-    var emotionEmoji: String
-    var verseReference: String
-    var verseText: String
-    var songTitle: String
-    var songArtist: String
-    var userText: String
-    var createdAt: Date
-}
-```
+## Current Known Fragile Area
+- The most fragile part of the code right now is `SelectEmotionView` gesture handling on emotion cards.
+- There have been several iterations around:
+  - tap to select
+  - long press to flip
+  - preventing long press release from also triggering tap
+  - ensuring the whole card is tappable, not only the emoji/text area
+- If future chats touch `SelectEmotionView`, this is the first thing to verify in simulator:
+  1. tap anywhere on card selects
+  2. long press anywhere flips
+  3. long press again while flipped flips back
+  4. selecting another emotion resets the previously flipped card
 
----
+## Current Known Styling Intent
+- The app should feel calm, soft, and emotionally guided
+- Reflection screen is currently the strongest visual reference for “good color usage”
+- Select emotion screen should not feel flat, but also should not feel over-designed
+- The user prefers:
+  - subtle tinted surfaces
+  - simple card faces
+  - minimal extra icons
+  - no repeated titles
 
-## UI Components
-- Dark mode enforced (.preferredColorScheme(.dark))
-- TabView with Home and History tabs
-- NavigationStack for screen navigation
-- Material effects (.thinMaterial, .ultraThinMaterial)
-- Glass effect for Plus button
+## Practical Notes For Future Chats
+- Read [SelectEmotionView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/Home/SelectEmotionView.swift) first if the task is about:
+  - card interaction
+  - `Tidak yakin` flow
+  - `Mulai` button layout
+- Read [ReflectionView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/Reflection/ReflectionView.swift) first if the task is about:
+  - color harmony
+  - spacing
+  - progress flow
+  - save behavior
+- Read [HistoryView.swift](/Users/joshua/Projects/AnakDomba/AnakDomba/Views/History/HistoryView.swift) first if the task is about:
+  - saved items not appearing
+  - wrong emotion color when reopening
 
----
-
-## Known Issues / Notes
-- Tab bar may have animation delay when navigating back from SelectEmotionView
-- History card colors are currently blue (not emotion-specific yet - TODO)
-- No swipe-to-delete (use long-press context menu instead)
-- "Tidak yakin" flow passes context text to ReflectionView as "Before you begin..." section
-
----
-
-## Future Development Ideas
-1. Emotion-specific card colors in History (color based on emotion)
-2. Swipe-to-delete on History cards
-3. More verses/songs per emotion (expand from 3 to 10+)
-4. User can customize verses and songs
-5. Audio playback for songs
-6. Share reflection feature
-7. Edit saved reflections
-8. Splash screen with app animation
-
----
-
-## Build & Run
-1. Open `AnakDomba.xcodeproj` in Xcode
-2. Select an iOS Simulator (iPhone 16 Pro recommended)
-3. Press Cmd+R to run
-
----
-
-## Developer Notes
-
-### To add new verses/songs:
-Edit `Models/EmotionContent.swift` - add new Verse/Song objects to each emotion's arrays.
-
-### To modify prompt templates:
-Edit the `prompt` string in each EmotionContent entry. Use `[Ayat]` as placeholder.
-
-### To add new emotions:
-1. Add to `emotions` array in ViewModels/SelectEmotionViewModel.swift
-2. Add corresponding entry in Models/EmotionContent.swift
-3. Add keywords to Resources/EmotionKeywords.swift
-
-### To add new emotion keywords:
-Edit `Resources/EmotionKeywords.swift` - add Indonesian keywords to the emotion arrays.
-
----
-
-*Last updated: April 18, 2026*
-*Project context preserved for continuity*
+## Open Follow-up Areas
+- Re-verify `SelectEmotionView` card gestures in simulator after any future edits
+- Re-verify `Tidak yakin` helper sheet spacing and centering on smaller devices
+- Re-verify history persistence after bigger SwiftData/model changes

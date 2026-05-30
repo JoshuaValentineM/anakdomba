@@ -8,6 +8,11 @@
 import SwiftUI
 import SwiftData
 
+enum HomeRoute: Hashable {
+    case selectEmotion
+    case reflection(Emotion)
+}
+
 private let dailyVerses: [(reference: String, text: String)] = [
     ("Mazmur 139:23-24", "Selidikilah aku, ya Allah, dan kenallah hatiku, ujilah aku dan kenallah pikiran-pikiranku; lihatlah, apakah jalanku serong, dan tuntunlah aku di jalan yang kekal!"),
     ("Mazmur 62:8", "Percayalah kepada-Nya setiap waktu, hai umat, curahkanlah terpancar kehidupan."),
@@ -21,25 +26,44 @@ private let dailyVerses: [(reference: String, text: String)] = [
 ]
 
 struct ContentView: View {
+    @State private var homePath = NavigationPath()
+    
     var body: some View {
         TabView {
-            NavigationStack {
+            NavigationStack(path: $homePath) {
                 HomeView()
+                    .navigationDestination(for: HomeRoute.self) { route in
+                        switch route {
+                        case .selectEmotion:
+                            SelectEmotionView { emotion in
+                                homePath.append(HomeRoute.reflection(emotion))
+                            }
+                        case .reflection(let emotion):
+                            ReflectionView(
+                                selectedEmotion: emotion,
+                                onCloseToHome: {
+                                    homePath = NavigationPath()
+                                }
+                            )
+                        }
+                    }
             }
             .tabItem {
                 Label("Beranda", systemImage: "house")
             }
 
-            HistoryView()
+            NavigationStack {
+                HistoryView()
+            }
                 .tabItem {
                     Label("Riwayat", systemImage: "clock")
                 }
         }
-        .preferredColorScheme(.dark)
     }
 }
 
 struct HomeView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var dailyVerse: (reference: String, text: String)
     
     init() {
@@ -48,7 +72,7 @@ struct HomeView: View {
     
     var body: some View {
         VStack(spacing: 16) {
-            Image(.anakDombaHorizontalLogoWhiteV2)
+            Image(colorScheme == .dark ? "Anak_Domba_Horizontal_Logo_White_v2" : "Anak_Domba_Horizontal_Logo_Black")
                 .resizable()
                 .scaledToFit()
                 .padding(.trailing)
@@ -58,7 +82,7 @@ struct HomeView: View {
                 
                 Spacer()
 
-                NavigationLink(destination: SelectEmotionView()) {
+                NavigationLink(value: HomeRoute.selectEmotion) {
                     PlusButton()
                 }
                 .buttonStyle(.plain)
@@ -80,21 +104,36 @@ struct HomeView: View {
                         .padding(.horizontal, 16)
                 }
                 .padding()
-                .cornerRadius(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(AppTheme.cardElevatedBackground(for: colorScheme))
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(AppTheme.cardStroke(for: colorScheme), lineWidth: 1)
+                )
+                .shadow(color: AppTheme.softShadow(for: colorScheme), radius: 14, y: 8)
                 Spacer()
             }
         }
         .padding()
+        .background(AppTheme.baseBackground(for: colorScheme).ignoresSafeArea())
     }
 }
 
 struct PlusButton: View {
+    @Environment(\.colorScheme) private var colorScheme
+    
     var body: some View {
         ZStack {
             Circle()
-                .fill(Color.clear)
+                .fill(AppTheme.glassFallbackBackground(for: colorScheme))
                 .frame(width: 160, height: 160)
                 .glassEffect()
+                .overlay(
+                    Circle()
+                        .stroke(AppTheme.cardStroke(for: colorScheme), lineWidth: 1)
+                )
             Text("+")
                 .font(.system(size: 90))
         }

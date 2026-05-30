@@ -43,8 +43,7 @@ class ReflectionViewModel: ObservableObject {
         if let content = emotionContents[selectedEmotion.label] {
             selectedVerse = content.verses.randomElement()
             songs = content.songs
-            
-            if let verse = selectedVerse {
+            if selectedVerse != nil {
                 currentPrompt = content.getPresenceText()
             }
         }

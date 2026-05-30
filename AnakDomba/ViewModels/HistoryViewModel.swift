@@ -58,13 +58,13 @@ class HistoryViewModel: ObservableObject {
     
     func getEmotionColor(_ label: String) -> Color {
         switch label {
-        case "Senang": return .yellow.opacity(0.15)
-        case "Sedih": return .blue.opacity(0.15)
-        case "Marah": return .red.opacity(0.15)
-        case "Jijik": return .green.opacity(0.15)
-        case "Ragu": return .purple.opacity(0.15)
-        case "Terkejut": return .orange.opacity(0.15)
-        case "Takut": return .teal.opacity(0.15)
+        case "Senang": return .yellow.opacity(0.3)
+        case "Sedih": return .blue.opacity(0.3)
+        case "Marah": return .red.opacity(0.3)
+        case "Jijik": return .green.opacity(0.3)
+        case "Ragu": return .purple.opacity(0.3)
+        case "Terkejut": return .orange.opacity(0.3)
+        case "Takut": return .teal.opacity(0.3)
         default: return .black
         }
     }
